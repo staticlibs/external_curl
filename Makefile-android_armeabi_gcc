@@ -17,7 +17,7 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./buildconf
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./configure \
 	    --host=${CMAKE_HOST} \
-	    --with-sysroot=${CMAKE_CURRENT_BINARY_DIR} \
+	    --with-sysroot=${CMAKE_SYSROOT} \
 	    --enable-static \
 	    --enable-symbol-hiding \
 	    --enable-http \

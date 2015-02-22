@@ -1,3 +1,12 @@
 [submodule "curl"]
 	path = curl
 	url = https://github.com/bagder/curl.git
+[submodule "cmake"]
+	path = cmake
+	url = ../cmake.git
+[submodule "deps/external_zlib"]
+	path = deps/external_zlib
+	url = ../external_zlib.git
+[submodule "deps/external_openssl"]
+	path = deps/external_openssl
+	url = ../external_openssl.git

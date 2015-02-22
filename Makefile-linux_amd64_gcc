@@ -13,8 +13,8 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	    --enable-http \
 	    --enable-ipv6 \
 	    --enable-cookies \
-	    --without-zlib \
-	    --without-ssl \
+	    --with-zlib=${CMAKE_BINARY_DIR}/external_zlib/zlib_src \
+	    --with-ssl=${CMAKE_BINARY_DIR}/external_openssl/openssl_install \
 	    --disable-shared \
 	    --disable-ares \
 	    --disable-dependency-tracking \
@@ -42,7 +42,6 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	    --disable-unix-sockets \
 	    --disable-soname-bump \
 	    --without-winssl \
-	    --without-winssl \
 	    --without-darwinssl \
 	    --without-gnutls \
 	    --without-polarssl \
@@ -57,7 +56,8 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	    --without-nghttp2 \
 	    ${${PROJECT_NAME}_DEBUG}
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(MAKE)
-	cp ${CMAKE_CURRENT_BINARY_DIR}/curl/lib/.libs/libcurl.a ${CMAKE_CURRENT_BINARY_DIR}
+	mkdir -p ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
+	cp ${CMAKE_CURRENT_BINARY_DIR}/curl/lib/.libs/libcurl.a ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.a
 else
 	@echo "[${CMAKE_CURRENT_BINARY_DIR}/curl] directory found, skipping build"
 endif	

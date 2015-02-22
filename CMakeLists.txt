@@ -6,7 +6,7 @@ set ( STATICLIB_TOOLCHAIN linux_amd64_clang CACHE STRING "toolchain triplet" )
 set ( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/toolchains/${STATICLIB_TOOLCHAIN}.cmake CACHE INTERNAL "" )
 
 # project setup
-project ( external_curl CXX )
+project ( external_curl C CXX )
 # common include
 include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/CMakeLists_common.cmake )
 
@@ -43,7 +43,10 @@ enable_testing ( )
 set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
 add_executable ( curl_test ${CMAKE_CURRENT_LIST_DIR}/test/curl_test.cpp )
 target_include_directories ( curl_test BEFORE PRIVATE ${${PROJECT_NAME}_INCLUDES} )
-target_link_libraries ( curl_test ${PROJECT_NAME} rt dl external_zlib external_openssl external_openssl_ssl )
+target_link_libraries ( curl_test ${PROJECT_NAME} dl external_zlib external_openssl external_openssl_ssl )
+if ( NOT STATICLIB_TOOLCHAIN MATCHES "android_[^_]+_[^_]+" )
+    target_link_libraries ( curl_test rt )
+endif ( )
 add_test ( curl_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/curl_test )
 
 # headers export

@@ -1,3 +1,16 @@
+# Copyright 2015, alex at staticlibs.net
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 cmake_minimum_required ( VERSION 2.8.12 )
 
@@ -7,6 +20,7 @@ set ( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/toolchains/${STATICLI
 
 # project setup
 project ( external_curl C CXX )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40 )
 # common include
 include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
 
@@ -39,15 +53,17 @@ add_dependencies( ${PROJECT_NAME} ${PROJECT_NAME}_build )
 set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/curl/include )
 
 # tests
-enable_testing ( )
-set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
-add_executable ( curl_test ${CMAKE_CURRENT_LIST_DIR}/test/curl_test.cpp )
-target_include_directories ( curl_test BEFORE PRIVATE ${${PROJECT_NAME}_INCLUDES} )
-target_link_libraries ( curl_test ${PROJECT_NAME} dl external_zlib external_openssl external_openssl_ssl )
-if ( STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
-    target_link_libraries ( curl_test rt )
+if ( "${STATICLIB_ROOT_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}" )
+    enable_testing ( )
+    set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
+    add_executable ( curl_test ${CMAKE_CURRENT_LIST_DIR}/test/curl_test.cpp )
+    target_include_directories ( curl_test BEFORE PRIVATE ${${PROJECT_NAME}_INCLUDES} )
+    target_link_libraries ( curl_test ${PROJECT_NAME} dl external_zlib external_openssl external_openssl_ssl )
+    if ( STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
+        target_link_libraries ( curl_test rt )
+    endif ( )
+    add_test ( curl_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/curl_test )
 endif ( )
-add_test ( curl_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/curl_test )
 
 # headers export
 set ( ${PROJECT_NAME}_INCLUDES ${${PROJECT_NAME}_INCLUDES} CACHE INTERNAL "" )

@@ -10,7 +10,7 @@ Wrapper doesn't use cURL's own CMake script directly as it appeared too hard to 
 
 cURL GitHub repository is used as a git submodule of this project. cURL is pinned to version 7.40.
 
-Link to [documentation](http://www.zlib.net/manual.html).
+Link to [documentation](http://curl.haxx.se/libcurl/c/).
 
 How to build
 ------------

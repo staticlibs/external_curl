@@ -15,12 +15,12 @@
 cmake_minimum_required ( VERSION 2.8.12 )
 
 # toolchain setup
-set ( STATICLIB_TOOLCHAIN linux_amd64_clang CACHE STRING "toolchain triplet" )
+set ( STATICLIB_TOOLCHAIN linux_amd64_gcc CACHE STRING "toolchain triplet" )
 set ( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/toolchains/${STATICLIB_TOOLCHAIN}.cmake CACHE INTERNAL "" )
 
 # project setup
 project ( external_curl C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40.1 )
 # common include
 include ( ${CMAKE_CURRENT_LIST_DIR}/cmake/staticlibs_common.cmake )
 
@@ -46,8 +46,8 @@ elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
 endif ( )
 
 # dependencies
-staticlib_add_subdirectory ( external_zlib )
-staticlib_add_subdirectory ( external_openssl )
+staticlib_add_subdirectory ( deps external_zlib )
+staticlib_add_subdirectory ( deps external_openssl )
 
 # library config
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/Makefile-${STATICLIB_TOOLCHAIN}
@@ -64,19 +64,16 @@ add_dependencies( ${PROJECT_NAME} ${PROJECT_NAME}_build )
 set ( ${PROJECT_NAME}_INCLUDES ${CMAKE_CURRENT_BINARY_DIR}/curl/include )
 
 # tests
-if ( "${STATICLIB_ROOT_SOURCE_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}" )
-    enable_testing ( )
-    set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
-    add_executable ( curl_test ${CMAKE_CURRENT_LIST_DIR}/test/curl_test.cpp )
-    target_include_directories ( curl_test BEFORE PRIVATE ${${PROJECT_NAME}_INCLUDES} )
-    target_link_libraries ( curl_test ${PROJECT_NAME} external_zlib external_openssl external_openssl_ssl )
-    if ( STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
-        target_link_libraries ( curl_test dl rt )
-    elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_msvc" )
-        target_compile_definitions ( curl_test PRIVATE -DCURL_STATICLIB )
-    endif ( )
-    add_test ( curl_test ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/curl_test )
+set ( ${PROJECT_NAME}_TEST_INCLUDES ${${PROJECT_NAME}_INCLUDES} )
+set ( ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME} external_zlib external_openssl external_openssl_ssl )
+set ( ${PROJECT_NAME}_TEST_OPTS "" )
+if ( STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
+    set ( ${PROJECT_NAME}_TEST_LIBS ${${PROJECT_NAME}_TEST_LIBS} dl rt )
 endif ( )
+if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_msvc" )
+    set ( ${PROJECT_NAME}_TEST_OPTS -DCURL_STATICLIB )
+endif ( )
+staticlib_enable_testing ( ${PROJECT_NAME}_TEST_INCLUDES ${PROJECT_NAME}_TEST_LIBS ${PROJECT_NAME}_TEST_OPTS )
 
 # headers export
 set ( ${PROJECT_NAME}_INCLUDES ${${PROJECT_NAME}_INCLUDES} CACHE INTERNAL "" )

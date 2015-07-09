@@ -44,6 +44,10 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2015-07-08**
+
+ * version 7.40.2 - toolchains update
+
 **2015-07-01**
 
  * version 7.40.1 - toolchains update, minor cmake fixes

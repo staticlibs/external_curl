@@ -13,15 +13,8 @@
 # limitations under the License.
 
 export CC := ${CMAKE_C_COMPILER}
-export AR := ${CMAKE_AR}
-export AS := ${CMAKE_AS}
-export LD := ${CMAKE_LD}
-export NM := ${CMAKE_NM}
-export OBJCOPY := ${CMAKE_OBJCOPY}
-export OBJDUMP := ${CMAKE_OBJDUMP}
-export RANLIB := ${CMAKE_RANLIB}
-export STRIP := ${CMAKE_STRIP}
 export CFLAGS := ${${PROJECT_NAME}_CFLAGS}
+export LDFLAGS := -L${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 
 all:
 ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
@@ -29,15 +22,13 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	cp -a ${CMAKE_CURRENT_LIST_DIR}/curl ${CMAKE_CURRENT_BINARY_DIR}/curl
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./buildconf
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./configure \
-	    --host=${CMAKE_HOST} \
-	    --with-sysroot=${CMAKE_SYSROOT} \
 	    --enable-static \
 	    --enable-symbol-hiding \
 	    --enable-http \
 	    --enable-ipv6 \
 	    --enable-cookies \
-	    --with-zlib=${CMAKE_BINARY_DIR}/external_zlib/zlib_src \
-	    --with-ssl=${CMAKE_BINARY_DIR}/external_openssl/openssl_install \
+	    --with-zlib${${PROJECT_NAME}_ZLIB_INSTALLED_PATH} \
+	    --with-ssl${${PROJECT_NAME}_OPENSSL_INSTALLED_PATH} \
 	    --disable-shared \
 	    --disable-ares \
 	    --disable-dependency-tracking \
@@ -80,7 +71,7 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	    ${${PROJECT_NAME}_DEBUG}
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(MAKE)
 	mkdir -p ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
-	cp ${CMAKE_CURRENT_BINARY_DIR}/curl/lib/.libs/libcurl.a ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.a
+	cp ${CMAKE_CURRENT_BINARY_DIR}/curl/lib/.libs/libcurl.a ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.a	
 else
 	@echo "[${CMAKE_CURRENT_BINARY_DIR}/curl] directory found, skipping build"
 endif	

@@ -16,10 +16,14 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project setup
 project ( external_curl C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40.3 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40.4 )
 set ( ${PROJECT_NAME}_DESCRIPTION "cURL library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_curl.git )
 include ( ${CMAKE_CURRENT_LIST_DIR}/resources/macros.cmake )
+
+# copy files
+file ( COPY ${CMAKE_CURRENT_LIST_DIR}/curl
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 # variables for makefiles
 if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
@@ -56,19 +60,28 @@ external_curl_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAM
 if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
     set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 endif ( )
+# copy makefile
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/Makefile-${STATICLIB_TOOLCHAIN}
         ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
 if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
     set ( ${PROJECT_NAME}_MAKE_PROGRAM nmake )
 else ( )
-    set ( ${PROJECT_NAME}_MAKE_PROGRAM make )
+    set ( ${PROJECT_NAME}_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM} )
 endif ( )
-add_custom_target( ${PROJECT_NAME} ALL
-        COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
+
+# run configure
+execute_process ( COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM}
+        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN} configure
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
+# add build target
+add_custom_target( ${PROJECT_NAME} ALL COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} 
+        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN} build
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 add_library( curl STATIC IMPORTED GLOBAL )
 set_target_properties( curl PROPERTIES IMPORTED_LOCATION 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl${CMAKE_STATIC_LIBRARY_SUFFIX} )
 add_dependencies( curl ${PROJECT_NAME} )
+# required here for curl configure-time checks
 if ( TARGET external_zlib )
     add_dependencies( ${PROJECT_NAME} external_zlib )
 endif ( )

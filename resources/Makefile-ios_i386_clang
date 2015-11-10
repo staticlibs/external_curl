@@ -24,11 +24,12 @@ export STRIP := ${CMAKE_STRIP}
 export CFLAGS := ${${PROJECT_NAME}_CFLAGS}
 export LDFLAGS := -L${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 
-all:
-ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
-	echo ${CMAKE_CURRENT_BINARY_DIR}
-	cp -a ${CMAKE_CURRENT_LIST_DIR}/curl ${CMAKE_CURRENT_BINARY_DIR}/curl
-	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./buildconf
+
+configure:
+	cd curl && $(SH) ./buildconf
+	
+build:
+ifeq ($(wildcard ./curl_flag),)	
 	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./configure \
 	    --host=${CMAKE_HOST} \
 	    --with-sysroot=${CMAKE_SYSROOT} \
@@ -79,9 +80,10 @@ ifeq ($(wildcard ${CMAKE_CURRENT_BINARY_DIR}/curl),)
 	    --without-libidn \
 	    --without-nghttp2 \
 	    ${${PROJECT_NAME}_DEBUG}
-	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(MAKE)
+	cd curl && $(MAKE)
 	mkdir -p ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
-	cp ${CMAKE_CURRENT_BINARY_DIR}/curl/lib/.libs/libcurl.a ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.a
+	cp ./curl/lib/.libs/libcurl.a ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.a
+	touch ./curl_flag
 else
-	@echo "[${CMAKE_CURRENT_BINARY_DIR}/curl] directory found, skipping build"
+	@echo "[${CMAKE_CURRENT_BINARY_DIR}/curl_flag] found, skipping build"
 endif	

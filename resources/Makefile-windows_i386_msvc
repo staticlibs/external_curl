@@ -12,22 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-all:
-	@if exist "${CMAKE_CURRENT_BINARY_DIR}/curl" echo "flag" > "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag"
-	@if exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo "[${CMAKE_CURRENT_BINARY_DIR}/curl] directory found, skipping build"
-# copy curl sources
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" xcopy /s /i /q "${CMAKE_CURRENT_LIST_DIR}/curl" "${CMAKE_CURRENT_BINARY_DIR}/curl"
+configure:
+	
+build:
+	@if exist curl_flag echo "[${CMAKE_CURRENT_BINARY_DIR}/curl_flag] found, skipping build"
 # copy zlib deps
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_BINARY_DIR}/external_zlib/zlib_install/include/zlib.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include/zlib.h"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_BINARY_DIR}/external_zlib/zlib_install/include/zconf.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include/zconf.h"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/z.lib" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/lib/zlib_a.lib"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/windows/tool_hugehelp.c" "${CMAKE_CURRENT_BINARY_DIR}/curl/src/tool_hugehelp.c"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/windows/curlbuild-${STATICLIB_TOOLCHAIN}.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/curlbuild.h"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_BINARY_DIR}/external_zlib/zlib_install/include/zlib.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include/zlib.h"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_BINARY_DIR}/external_zlib/zlib_install/include/zconf.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include/zconf.h"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/z.lib" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/lib/zlib_a.lib"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/windows/tool_hugehelp.c" "${CMAKE_CURRENT_BINARY_DIR}/curl/src/tool_hugehelp.c"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_CURRENT_LIST_DIR}/resources/windows/curlbuild-${STATICLIB_TOOLCHAIN}.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/curlbuild.h"
 # copy openssl deps
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" xcopy /i /q "${CMAKE_BINARY_DIR}/external_openssl/openssl/include/openssl\*.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" xcopy /i /q "${CMAKE_BINARY_DIR}/external_openssl/openssl/include/openssl\*.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include/openssl"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcrypto.lib" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/lib/libeay32.lib"
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libssl.lib" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/lib/ssleay32.lib"
+	@if not exist curl_flag xcopy /i /q "${CMAKE_BINARY_DIR}/external_openssl/openssl/include/openssl\*.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include"
+	@if not exist curl_flag xcopy /i /q "${CMAKE_BINARY_DIR}/external_openssl/openssl/include/openssl\*.h" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/include/openssl"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcrypto.lib" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/lib/libeay32.lib"
+	@if not exist curl_flag echo f | xcopy /f /y "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libssl.lib" "${CMAKE_CURRENT_BINARY_DIR}/curl/deps/lib/ssleay32.lib"
 # run build
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" pushd "${CMAKE_CURRENT_BINARY_DIR}/curl/winbuild" & nmake /nologo /f Makefile.vc mode=static WITH_SSL=static WITH_ZLIB=static ENABLE_SSPI=no ENABLE_IPV6=yes ENABLE_IDN=no ENABLE_WINSSL=no DEBUG=${${PROJECT_NAME}_DEBUG_WINDOWS} MACHINE=${${PROJECT_NAME}_ARCH_WINDOWS} RTLIBCFG=static GEN_PDB=no WITH_DEVEL="..\deps" & popd
-	@if not exist "${CMAKE_CURRENT_BINARY_DIR}/curl_exists.flag" echo f | xcopy /f /y "${CMAKE_CURRENT_BINARY_DIR}/curl/builds/libcurl-vc-${${PROJECT_NAME}_ARCH_WINDOWS}-${${PROJECT_NAME}_DEBUG_MARKER_WINDOWS}-static-ssl-static-zlib-static-ipv6/lib/${${PROJECT_NAME}_DEBUG_LIBNAME_WINDOWS}" "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.lib"
+	@if not exist curl_flag pushd "curl\winbuild" & nmake /nologo /f Makefile.vc mode=static WITH_SSL=static WITH_ZLIB=static ENABLE_SSPI=no ENABLE_IPV6=yes ENABLE_IDN=no ENABLE_WINSSL=no DEBUG=${${PROJECT_NAME}_DEBUG_WINDOWS} MACHINE=${${PROJECT_NAME}_ARCH_WINDOWS} RTLIBCFG=static GEN_PDB=no WITH_DEVEL="..\deps" & popd
+	@if not exist curl_flag echo f | xcopy /f /y "curl/builds/libcurl-vc-${${PROJECT_NAME}_ARCH_WINDOWS}-${${PROJECT_NAME}_DEBUG_MARKER_WINDOWS}-static-ssl-static-zlib-static-ipv6/lib/${${PROJECT_NAME}_DEBUG_LIBNAME_WINDOWS}" "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libcurl.lib"
+	@if not exist curl_flag echo "flag" > curl_flag

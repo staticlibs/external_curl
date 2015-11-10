@@ -26,7 +26,7 @@ project ( external_curl_test CXX )
 include ( ${STATICLIB_CMAKE}/staticlibs_common.cmake )
 
 # dependencies
-if ( NOT STATICLIB_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
+if ( NOT STATICLIB_TOOLCHAIN MATCHES "linux_amd64_[^_]+" )
     staticlib_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/deps/external_zlib )
     staticlib_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/deps/external_openssl )
 endif ( )

@@ -16,14 +16,46 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project setup
 project ( external_curl C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40.4 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.40.5 )
 set ( ${PROJECT_NAME}_DESCRIPTION "cURL library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_curl.git )
 include ( ${CMAKE_CURRENT_LIST_DIR}/resources/macros.cmake )
 
+# standalone build
+if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
+    set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} )
+endif ( )
+if ( NOT DEFINED STATICLIB_TOOLCHAIN )
+    if ( NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Linux" )
+        staticlib_icu_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_zlib )
+        staticlib_icu_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_openssl )
+    endif ( )
+    if ( NOT DEFINED ${PROJECT_NAME}_TOOLCHAIN )
+        if ( WIN32 )
+            if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
+                set ( ${PROJECT_NAME}_TOOLCHAIN "windows_amd64_msvc" )
+            else ( )
+                set ( ${PROJECT_NAME}_TOOLCHAIN "windows_i386_msvc" )
+            endif ( )
+        elseif ( APPLE )
+            set ( ${PROJECT_NAME}_TOOLCHAIN "macosx_amd64_clang" )
+        elseif ( UNIX )
+            set ( ${PROJECT_NAME}_TOOLCHAIN "linux_amd64_gcc" )
+        else ( )
+            message ( FATAL_ERROR "Cannot determine toolchain to use, please specify [${PROJECT_NAME}_TOOLCHAIN]" )
+        endif ( )
+    endif ( )
+else ( )
+    set ( ${PROJECT_NAME}_TOOLCHAIN ${STATICLIB_TOOLCHAIN} )
+endif ( )
+
 # copy files
 file ( COPY ${CMAKE_CURRENT_LIST_DIR}/curl
         DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/preconfigured/curlbuild-${${PROJECT_NAME}_TOOLCHAIN}.h
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/ )
+file ( RENAME ${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/curlbuild-${${PROJECT_NAME}_TOOLCHAIN}.h
+        ${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/curlbuild.h )
 
 # variables for makefiles
 if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
@@ -40,9 +72,9 @@ if ( CMAKE_BUILD_TYPE MATCHES "Release" )
     set ( ${PROJECT_NAME}_DEBUG_MARKER_WINDOWS "release" )
     set ( ${PROJECT_NAME}_DEBUG_LIBNAME_WINDOWS "libcurl_a.lib" )
 endif ( )
-if ( STATICLIB_TOOLCHAIN MATCHES "windows_i386_[^_]+" )
+if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_i386_[^_]+" )
     set ( ${PROJECT_NAME}_ARCH_WINDOWS "x86" )
-elseif ( STATICLIB_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
+elseif ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
     set ( ${PROJECT_NAME}_ARCH_WINDOWS "x64" )
 endif ( )
 if ( TARGET external_zlib )
@@ -61,9 +93,9 @@ if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
     set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 endif ( )
 # copy makefile
-configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/Makefile-${STATICLIB_TOOLCHAIN}
-        ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN})
-if ( STATICLIB_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/Makefile-${${PROJECT_NAME}_TOOLCHAIN}
+        ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${${PROJECT_NAME}_TOOLCHAIN})
+if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
     set ( ${PROJECT_NAME}_MAKE_PROGRAM nmake )
 else ( )
     set ( ${PROJECT_NAME}_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM} )
@@ -71,11 +103,11 @@ endif ( )
 
 # run configure
 execute_process ( COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM}
-        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN} configure
+        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${${PROJECT_NAME}_TOOLCHAIN} configure
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 # add build target
 add_custom_target( ${PROJECT_NAME} ALL COMMAND ${${PROJECT_NAME}_MAKE_PROGRAM} 
-        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${STATICLIB_TOOLCHAIN} build
+        -f ${CMAKE_CURRENT_BINARY_DIR}/Makefile-${${PROJECT_NAME}_TOOLCHAIN} build
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
 add_library( curl STATIC IMPORTED GLOBAL )
 set_target_properties( curl PROPERTIES IMPORTED_LOCATION 

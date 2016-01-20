@@ -26,10 +26,12 @@ export LDFLAGS := -L${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 
 
 configure:
-	cd curl && $(SH) ./buildconf
+	# no-op, preconfigured headers are used
 	
 build:	
 ifeq ($(wildcard ./curl_flag),)
+	rm curl/include/curl/curlbuild.h
+	cd curl && $(SH) ./buildconf
 	cd curl && $(SH) ./configure \
 	    --host=${CMAKE_HOST} \
 	    --with-sysroot=${CMAKE_SYSROOT} \

@@ -17,11 +17,13 @@ export CFLAGS := ${${PROJECT_NAME}_CFLAGS}
 export LDFLAGS := -L${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 
 configure:
-	cd curl && $(SH) ./buildconf
+	# no-op, preconfigured headers are used
 	
-build:
+build:	
 ifeq ($(wildcard ./curl_flag),)
-	cd ${CMAKE_CURRENT_BINARY_DIR}/curl && $(SH) ./configure \
+	rm curl/include/curl/curlbuild.h
+	cd curl && $(SH) ./buildconf
+	cd curl && $(SH) ./configure \
 	    --enable-static \
 	    --enable-symbol-hiding \
 	    --enable-http \

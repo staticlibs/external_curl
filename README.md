@@ -4,11 +4,10 @@ cURL library build for Staticlibs
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project contains a CMake wrapper for the [cURL library](https://github.com/bagder/curl). 
-Wrapper doesn't use cURL's own CMake script directly as it appeared too hard to integrate.
 
 cURL GitHub repository is used as a git submodule of this project. cURL is pinned to version 7.40.
 
-Link to [documentation](http://curl.haxx.se/libcurl/c/).
+Link to the [documentation](http://curl.haxx.se/libcurl/c/).
 
 How to build
 ------------
@@ -19,25 +18,6 @@ How to build
 For Windows users ready-to-use binary version of `pkg-config` can be obtained from [tools_windows_pkgconfig](https://github.com/staticlibs/tools_windows_pkgconfig) repository.
 See [PkgConfig](https://github.com/staticlibs/wiki/wiki/PkgConfig) for Staticlibs-specific details about `pkg-config` usage.
 
-This project depends on [zlib](http://www.zlib.net/) and [openssl](https://www.openssl.org/) libraries.
-
-See [StaticlibsDependencies](https://github.com/staticlibs/wiki/wiki/StaticlibsDependencies) for more 
-details about dependency management with Staticlibs.
-
-To build this project manually:
-
- * checkout all the dependent projects
- * configure these projects using the same output directory:
-
-Run:
-
-    mkdir build
-    cd build
-    cmake .. -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=<my_lib_dir>
-
- * build all the dependent projects
- * configure this projects using the same output directory and build it:
-
 [Perl](https://www.perl.org/) is also required for building, Windows users can obtain ready-to-use
 Perl distribution from [tools_windows_perl](https://github.com/staticlibs/tools_windows_perl) repository.
 
@@ -45,12 +25,18 @@ To build the library on Windows using Visual Studio 2013 Express run the followi
 Visual Studio development command prompt 
 (`C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x86 Native Tools Command Prompt`):
 
+    git clone --recursive https://github.com/staticlibs/external_zlib.git
+    git clone --recursive https://github.com/staticlibs/external_openssl.git
     git clone --recursive https://github.com/staticlibs/external_curl.git
     cd external_curl
     mkdir build
     cd build
     cmake .. -DSTATICLIB_TOOLCHAIN=windows_i386_msvc
     msbuild external_curl.sln
+
+Cloning of [external_zlib](https://github.com/staticlibs/external_zlib) and 
+[external_openssl](https://github.com/staticlibs/external_openssl.git) is not required on Linux - 
+system libraries will be used instead.
 
 See [StaticlibsToolchains](https://github.com/staticlibs/wiki/wiki/StaticlibsToolchains) for 
 more information about the toolchain setup and cross-compilation.
@@ -62,6 +48,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2016-01-20**
+
+ * version 7.40.5
+ * minor CMake changes
 
 **2015-11-10**
 

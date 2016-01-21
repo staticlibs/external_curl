@@ -17,7 +17,7 @@ export CFLAGS := ${${PROJECT_NAME}_CFLAGS}
 export LDFLAGS := -L${CMAKE_LIBRARY_OUTPUT_DIRECTORY}
 
 configure:
-	# no-op, preconfigured headers are used
+	@echo -- Skipping configure, it will be run during the build stage
 	
 # configure step moved to build due to configure-time deps checks
 build:	

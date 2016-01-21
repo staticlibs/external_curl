@@ -57,6 +57,18 @@ file ( COPY ${CMAKE_CURRENT_LIST_DIR}/resources/preconfigured/curlbuild-${${PROJ
 file ( RENAME ${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/curlbuild-${${PROJECT_NAME}_TOOLCHAIN}.h
         ${CMAKE_CURRENT_BINARY_DIR}/curl/include/curl/curlbuild.h )
 
+# check deplibs cache
+if ( STATICLIB_USE_DEPLIBS_CACHE )
+    set ( ${PROJECT_NAME}_CACHED_LIB_PATH ${STATICLIB_DEPLIBS_CACHE_DIR}/libcurl${CMAKE_STATIC_LIBRARY_SUFFIX} )
+    if ( EXISTS ${${PROJECT_NAME}_CACHED_LIB_PATH} )
+        add_library( curl STATIC IMPORTED GLOBAL )
+        set_target_properties( curl PROPERTIES IMPORTED_LOCATION ${${PROJECT_NAME}_CACHED_LIB_PATH} )
+        add_custom_target( ${PROJECT_NAME} )
+        message ( STATUS "Using cached library: [${${PROJECT_NAME}_CACHED_LIB_PATH}]" )
+        return ( )
+    endif ( )
+endif ( )
+
 # variables for makefiles
 if ( CMAKE_BUILD_TYPE MATCHES "Debug" )
     set ( ${PROJECT_NAME}_CFLAGS "${CMAKE_C_FLAGS} ${CMAKE_C_FLAGS_DEBUG}" )

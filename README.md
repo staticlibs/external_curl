@@ -21,6 +21,11 @@ See [PkgConfig](https://github.com/staticlibs/wiki/wiki/PkgConfig) for Staticlib
 [Perl](https://www.perl.org/) is also required for building, Windows users can obtain ready-to-use
 Perl distribution from [tools_windows_perl](https://github.com/staticlibs/tools_windows_perl) repository.
 
+[NASM](http://nasm.us/) is also required for building on Windows x86 
+(optional on Windows x86_64 - will be used if present in `PATH`).
+You can obtain ready-to-use NASM distribution from 
+[tools_windows_nasm](https://github.com/staticlibs/tools_windows_nasm) repository.
+
 To build the library on Windows using Visual Studio 2013 Express run the following commands using
 Visual Studio development command prompt 
 (`C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x86 Native Tools Command Prompt`):

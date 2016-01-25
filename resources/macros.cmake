@@ -39,3 +39,12 @@ macro ( ${PROJECT_NAME}_list_to_string _out_var_name _prefix _list_var_name )
         set ( ${_out_var_name} "${${_out_var_name}}${_prefix}${_el} " )
     endforeach ( )
 endmacro ( )
+
+# applies git patch to the specified project
+macro ( ${PROJECT_NAME}_apply_git_patch _gitdir_path _patch_path )
+    message ( STATUS "Applying patch: [${_patch_path}] to [${_gitdir_path}]" )
+    execute_process ( COMMAND git reset --hard HEAD
+            WORKING_DIRECTORY ${_gitdir_path} )
+    execute_process ( COMMAND git apply ${_patch_path}
+            WORKING_DIRECTORY ${_gitdir_path} )
+endmacro ( )

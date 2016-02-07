@@ -139,7 +139,7 @@ if ( TARGET external_openssl )
 endif ( )
 
 # pkg-config
-set ( ${PROJECT_NAME}_MODULE curl )
+set ( ${PROJECT_NAME}_MODULE libcurl )
 set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_BINARY_DIR}/curl/include" )
 if ( WIN32 )
     set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -DCURL_STATICLIB" )
@@ -150,4 +150,4 @@ if ( CMAKE_SYSTEM_NAME MATCHES "Linux" )
     set ( ${PROJECT_NAME}_PC_LIBS "${${PROJECT_NAME}_PC_LIBS} -ldl -lrt" )
 endif ( )
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
-        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/curl.pc )
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/libcurl.pc )

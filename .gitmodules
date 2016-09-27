@@ -1,3 +1,6 @@
 [submodule "curl"]
 	path = curl
 	url = https://github.com/bagder/curl.git
+[submodule "lookaside_curl"]
+	path = lookaside_curl
+	url = https://github.com/ojdkbuild/lookaside_curl.git

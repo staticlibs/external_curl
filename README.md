@@ -3,9 +3,10 @@ cURL library build for Staticlibs
 
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
-This project contains a CMake wrapper for the [cURL library](https://github.com/bagder/curl). 
+This project contains a CMake wrapper for the [cURL library](https://curl.haxx.se/libcurl/). 
 
-cURL GitHub repository is used as a git submodule of this project. cURL is pinned to version 7.40.
+[cURL sources imported from CentOS lookaside](https://github.com/ojdkbuild/lookaside_curl.git)
+are used a submodule of this project.
 
 Link to the [documentation](http://curl.haxx.se/libcurl/c/).
 
@@ -21,8 +22,7 @@ See [PkgConfig](https://github.com/staticlibs/wiki/wiki/PkgConfig) for Staticlib
 [Perl](https://www.perl.org/) is also required for building, Windows users can obtain ready-to-use
 Perl distribution from [tools_windows_perl](https://github.com/staticlibs/tools_windows_perl) repository.
 
-[NASM](http://nasm.us/) is also required for building on Windows x86 
-(optional on Windows x86_64 - will be used if present in `PATH`).
+[NASM](http://nasm.us/) is also required for building on Windows.
 You can obtain ready-to-use NASM distribution from 
 [tools_windows_nasm](https://github.com/staticlibs/tools_windows_nasm) repository.
 
@@ -36,7 +36,7 @@ Visual Studio development command prompt
     cd external_curl
     mkdir build
     cd build
-    cmake .. -DSTATICLIB_TOOLCHAIN=windows_i386_msvc
+    cmake ..
     msbuild external_curl.sln
 
 Cloning of [external_zlib](https://github.com/staticlibs/external_zlib) and 
@@ -53,6 +53,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2016-10-29**
+
+ * version 7.29.0-1
+ * use cURL sources from CentOS
 
 **2016-01-20**
 

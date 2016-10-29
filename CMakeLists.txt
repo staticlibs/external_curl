@@ -59,7 +59,7 @@ if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_msvc" )
     # pkg-config
     set ( ${PROJECT_NAME}_MODULE curl )
     set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake/include_${${PROJECT_NAME}_TOOLCHAIN}" )
-    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/lookaside_curl/include" )
+    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/curl/include" )
     set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -DCURL_STATICLIB" )
     set ( ${PROJECT_NAME}_PC_LIBS "-L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} -lcurl -lws2_32 -lwldap32" )
     configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 

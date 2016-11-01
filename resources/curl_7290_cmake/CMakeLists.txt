@@ -58,7 +58,8 @@ set ( ${PROJECT_NAME}_DEFINITIONS
         -DHAVE_ZLIB
         -DHAVE_LIBZ
         -DWIN32
-        -DWIN32_LEAN_AND_MEAN )
+        -DWIN32_LEAN_AND_MEAN
+        -DCURL_DISABLE_LDAP )
 
 # sources
 set ( ${PROJECT_NAME}_SRC 

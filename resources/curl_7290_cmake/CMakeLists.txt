@@ -189,6 +189,7 @@ target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}
         ${${PROJECT_NAME}_SOURCE_DIR}/include
         ${${PROJECT_NAME}_SOURCE_DIR}/lib
+        ${${PROJECT_NAME}_SOURCE_DIR}/include/curl
         ${${PROJECT_NAME}_DEPS_PC_INCLUDE_DIRS} ) 
 target_compile_definitions ( ${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_DEFINITIONS} )
 

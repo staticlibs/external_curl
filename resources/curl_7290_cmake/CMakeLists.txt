@@ -26,6 +26,10 @@ if ( NOT DEFINED STATICLIB_TOOLCHAIN )
             else ( )
                 set ( ${PROJECT_NAME}_TOOLCHAIN "windows_i386_msvc" )
             endif ( )
+        elseif ( APPLE )
+            set ( ${PROJECT_NAME}_TOOLCHAIN "macosx_amd64_clang" )
+        elseif ( UNIX )
+            set ( ${PROJECT_NAME}_TOOLCHAIN "linux_amd64_gcc" )
         else ( )
             message ( FATAL_ERROR "Cannot determine toolchain to use, please specify [${PROJECT_NAME}_TOOLCHAIN]" )
         endif ( )
@@ -50,7 +54,8 @@ if ( STATICLIB_USE_DEPLIBS_CACHE )
 endif ( )
 
 # definitions
-set ( ${PROJECT_NAME}_DEFINITIONS
+if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[_^]+_[_^]+" )
+    set ( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS}
         -DCURL_STATICLIB 
         -DBUILDING_LIBCURL 
         -DUSE_SSLEAY
@@ -60,6 +65,10 @@ set ( ${PROJECT_NAME}_DEFINITIONS
         -DWIN32
         -DWIN32_LEAN_AND_MEAN
         -DCURL_DISABLE_LDAP )
+else ( )
+    set ( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS}
+        -DHAVE_CONFIG_H )
+endif ( )
 
 # sources
 set ( ${PROJECT_NAME}_SRC 
@@ -175,8 +184,7 @@ source_group ( "src" FILES ${${PROJECT_NAME}_SRC} )
 
 # library
 add_library ( ${PROJECT_NAME} STATIC 
-        ${${PROJECT_NAME}_SRC} 
-        ${${PROJECT_NAME}_ASMOBJ} )
+        ${${PROJECT_NAME}_SRC} )
 target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}
         ${${PROJECT_NAME}_SOURCE_DIR}/include

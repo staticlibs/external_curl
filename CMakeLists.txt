@@ -31,41 +31,24 @@ if ( NOT DEFINED STATICLIB_TOOLCHAIN )
         external_curl_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_zlib )
         external_curl_add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/../external_openssl )
     endif ( )
-    if ( NOT DEFINED ${PROJECT_NAME}_TOOLCHAIN )
-        if ( WIN32 )
-            if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-                set ( ${PROJECT_NAME}_TOOLCHAIN "windows_amd64_msvc" )
-            else ( )
-                set ( ${PROJECT_NAME}_TOOLCHAIN "windows_i386_msvc" )
-            endif ( )
-        elseif ( APPLE )
-            set ( ${PROJECT_NAME}_TOOLCHAIN "macosx_amd64_clang" )
-        elseif ( UNIX )
-            set ( ${PROJECT_NAME}_TOOLCHAIN "linux_amd64_gcc" )
-        else ( )
-            message ( FATAL_ERROR "Cannot determine toolchain to use, please specify [${PROJECT_NAME}_TOOLCHAIN]" )
-        endif ( )
-    endif ( )
-else ( )
-    set ( ${PROJECT_NAME}_TOOLCHAIN ${STATICLIB_TOOLCHAIN} )
 endif ( )
 
-# lookaside build for windows
-if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_msvc" )
-    # curl subproject
-    add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake ${CMAKE_CURRENT_BINARY_DIR}/curl )
-    add_custom_target ( ${PROJECT_NAME} DEPENDS curl )
+# curl subproject
+add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake ${CMAKE_CURRENT_BINARY_DIR}/curl )
+add_custom_target ( ${PROJECT_NAME} DEPENDS curl )
 
-    # pkg-config
-    set ( ${PROJECT_NAME}_MODULE curl )
-    set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake/include_${${PROJECT_NAME}_TOOLCHAIN}" )
-    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/curl/include" )
-    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -DCURL_STATICLIB" )
-    set ( ${PROJECT_NAME}_PC_LIBS "-L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} -lcurl -lws2_32" )
-    configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
-            ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/curl.pc )
-    configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
-            ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/libcurl.pc )
-else ()
-    message ( FATAL_ERROR "Currently only windows builds are supported, please use older version" )
+# pkg-config
+set ( ${PROJECT_NAME}_MODULE curl )
+set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake/include_${${PROJECT_NAME}_TOOLCHAIN}" )
+set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -I${CMAKE_CURRENT_LIST_DIR}/curl/include" )
+set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -DCURL_STATICLIB" )
+set ( ${PROJECT_NAME}_PC_LIBS "-L${CMAKE_LIBRARY_OUTPUT_DIRECTORY} -lcurl" )
+if ( ${CMAKE_C_COMPILER_ID}x MATCHES "MSVCx" )
+    set ( ${PROJECT_NAME}_PC_LIBS "${${PROJECT_NAME}_PC_LIBS} -lws2_32" )
+elseif ( ${CMAKE_C_COMPILER_ID} MATCHES "GNU" )
+    set ( ${PROJECT_NAME}_PC_LIBS "${${PROJECT_NAME}_PC_LIBS} -lrt" )
 endif ( )
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/curl.pc )
+configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
+        ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/libcurl.pc )

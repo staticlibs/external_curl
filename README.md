@@ -54,6 +54,12 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2016-11-08**
+
+ * version 7.29.0-2
+ * cURL sources update
+ * Android and Linux builds
+
 **2016-10-29**
 
  * version 7.29.0-1

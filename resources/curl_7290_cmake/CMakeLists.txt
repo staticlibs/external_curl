@@ -54,7 +54,7 @@ if ( STATICLIB_USE_DEPLIBS_CACHE )
 endif ( )
 
 # definitions
-if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[_^]+_[_^]+" )
+if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
     set ( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS}
         -DCURL_STATICLIB 
         -DBUILDING_LIBCURL 

@@ -42,6 +42,14 @@ endif ( )
 set ( ${PROJECT_NAME}_DEPS zlib openssl )
 external_curl_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_DEPS )
 
+# headers
+message ( STATUS "Copying headers ..." )
+configure_file( "${${PROJECT_NAME}_SOURCE_DIR}/include/curl/curl.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curl.h" COPYONLY )
+configure_file( "${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}/curlbuild.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curlbuild.h" COPYONLY )
+if ( NOT ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+    configure_file( "${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}/curl_config.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curl_config.h" COPYONLY )
+endif ( )
+
 # check deplibs cache
 if ( STATICLIB_USE_DEPLIBS_CACHE )
     set ( ${PROJECT_NAME}_CACHED_LIB_PATH ${STATICLIB_DEPLIBS_CACHE_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}${PROJECT_NAME}${CMAKE_STATIC_LIBRARY_SUFFIX} )
@@ -186,7 +194,8 @@ source_group ( "src" FILES ${${PROJECT_NAME}_SRC} )
 add_library ( ${PROJECT_NAME} STATIC 
         ${${PROJECT_NAME}_SRC} )
 target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}
+        ${CMAKE_CURRENT_BINARY_DIR}/include
+        ${CMAKE_CURRENT_BINARY_DIR}/include/curl
         ${${PROJECT_NAME}_SOURCE_DIR}/include
         ${${PROJECT_NAME}_SOURCE_DIR}/lib
         ${${PROJECT_NAME}_SOURCE_DIR}/include/curl

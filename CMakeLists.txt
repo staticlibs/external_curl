@@ -52,6 +52,7 @@ endif ( )
 
 # curl subproject
 add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake ${CMAKE_CURRENT_BINARY_DIR}/curl )
+set_target_properties ( curl PROPERTIES FOLDER "deps" )
 add_custom_target ( ${PROJECT_NAME} DEPENDS curl )
 
 # pkg-config

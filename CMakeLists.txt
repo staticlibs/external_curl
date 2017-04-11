@@ -68,6 +68,7 @@ if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
 elseif ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "linux_[^_]+_[^_]+" )
     set ( ${PROJECT_NAME}_PC_LIBS "${${PROJECT_NAME}_PC_LIBS} -lrt" )
 endif ( )
+set ( ${PROJECT_NAME}_PC_REQUIRES_PRIVATE "zlib" )
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 
         ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/pkgconfig/curl.pc )
 configure_file ( ${CMAKE_CURRENT_LIST_DIR}/resources/pkg-config.in 

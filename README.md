@@ -1,6 +1,9 @@
 cURL library build for Staticlibs
 =================================
 
+[![travis](https://travis-ci.org/staticlibs/external_curl.svg?branch=master)](https://travis-ci.org/staticlibs/external_curl)
+[![appveyor](https://ci.appveyor.com/api/projects/status/github/staticlibs/external_curl?svg=true)](https://ci.appveyor.com/project/staticlibs/external-curl)
+
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
 This project contains a CMake wrapper for the [cURL library](https://curl.haxx.se/libcurl/). 
@@ -17,7 +20,7 @@ How to build
 
 [pkg-config](http://www.freedesktop.org/wiki/Software/pkg-config/) utility is used for dependency management.
 For Windows users ready-to-use binary version of `pkg-config` can be obtained from [tools_windows_pkgconfig](https://github.com/staticlibs/tools_windows_pkgconfig) repository.
-See [PkgConfig](https://github.com/staticlibs/wiki/wiki/PkgConfig) for Staticlibs-specific details about `pkg-config` usage.
+See [StaticlibsPkgConfig](https://github.com/staticlibs/wiki/wiki/StaticlibsPkgConfig) for Staticlibs-specific details about `pkg-config` usage.
 
 [Perl](https://www.perl.org/) is also required for building, Windows users can obtain ready-to-use
 Perl distribution from [tools_windows_perl](https://github.com/staticlibs/tools_windows_perl) repository.
@@ -53,6 +56,10 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2017-12-31**
+ * version 7.29.0-3
+ * vs2017 support
 
 **2016-11-08**
 

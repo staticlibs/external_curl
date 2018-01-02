@@ -30,14 +30,25 @@ before_install:
   - export CC=
   - export CXX=
 
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
+    `# Android` ;
+    git clone https://github.com/staticlibs/android-ndk-r9d-arm-linux-androideabi-4.8.git ../android-ndk ;
+    fi
+
 before_script:
   - git submodule update --init --recursive
   - cd ..
+# mac
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    git clone --recursive https://github.com/staticlibs/external_zlib.git ;
     git clone https://github.com/staticlibs/tools_macos_openssl.git ;
     export PKG_CONFIG_PATH=`pwd`/tools_macos_openssl/lib/pkgconfig:$PKG_CONFIG_PATH ;
     fi
+# android
+  - git clone --recursive https://github.com/staticlibs/external_openssl.git
+# mac and android
+  - git clone --recursive https://github.com/staticlibs/external_zlib.git
+# all platforms
   - git clone https://github.com/staticlibs/cmake.git
   - git clone https://github.com/staticlibs/staticlib_config.git
 
@@ -73,6 +84,13 @@ script:
     popd ;
     pushd build ;
     cmake ../external_curl/test -DCMAKE_BUILD_TYPE=Release ;
+    make ;
+    popd ;
+
+    `# Android` ;
+    mkdir build-android ;
+    pushd build-android ;
+    cmake ../external_curl/test -DCMAKE_BUILD_TYPE=Release -DSTATICLIB_TOOLCHAIN=android_armeabi_gcc -DANDROID_TOOLCHAIN_DIR=`pwd`/../android-ndk ;
     make ;
 
     fi

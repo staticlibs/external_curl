@@ -17,7 +17,7 @@ project ( curl C )
 include ( ${CMAKE_CURRENT_LIST_DIR}/../macros.cmake )
 
 if ( NOT DEFINED ${PROJECT_NAME}_LOOKASIDE_DIR )
-    set ( ${PROJECT_NAME}_LOOKASIDE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../lookaside_curl )
+    set ( ${PROJECT_NAME}_LOOKASIDE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../lookaside_curl CACHE INTERNAL "" )
 endif ( )
 
 # standalone build

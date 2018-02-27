@@ -82,7 +82,7 @@ else ( )
 endif ( )
 
 # sources
-set ( ${PROJEC${${PROJECT_NAME}_SOURCE_DT_NAME}_SRC 
+set ( ${PROJECT_NAME}_SRC 
         ${${PROJECT_NAME}_LOOKASIDE_DIR}/lib/file.c
         ${${PROJECT_NAME}_LOOKASIDE_DIR}/lib/timeval.c
         ${${PROJECT_NAME}_LOOKASIDE_DIR}/lib/base64.c

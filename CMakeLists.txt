@@ -16,7 +16,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project setup
 project ( external_curl C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.29.0-3 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.29.0-4 )
 set ( ${PROJECT_NAME}_DESCRIPTION "cURL library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_curl.git )
 include ( ${CMAKE_CURRENT_LIST_DIR}/resources/macros.cmake )
@@ -53,7 +53,7 @@ else ( )
 endif ( )
 
 # curl subproject
-add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/curl_7290_cmake ${CMAKE_CURRENT_BINARY_DIR}/curl )
+add_subdirectory ( ${CMAKE_CURRENT_LIST_DIR}/resources/curl_cmake ${CMAKE_CURRENT_BINARY_DIR}/curl )
 set_target_properties ( curl PROPERTIES FOLDER "deps" )
 add_custom_target ( ${PROJECT_NAME} DEPENDS curl )
 

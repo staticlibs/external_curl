@@ -6,10 +6,8 @@ cURL library build for Staticlibs
 
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
-This project contains a CMake wrapper for the [cURL library](https://curl.haxx.se/libcurl/). 
-
-[cURL sources imported from CentOS lookaside](https://github.com/ojdkbuild/lookaside_curl.git)
-are used a submodule of this project.
+This project contains a CMake wrapper for the [cURL library](https://curl.haxx.se/libcurl/) that
+can be used to build sources imported from [CentOS lookaside](https://github.com/staticlibs/lookaside_curl.git).
 
 Link to the [documentation](http://curl.haxx.se/libcurl/c/).
 
@@ -33,9 +31,12 @@ To build the library on Windows using Visual Studio 2013 Express run the followi
 Visual Studio development command prompt 
 (`C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\Shortcuts\VS2013 x86 Native Tools Command Prompt`):
 
-    git clone --recursive https://github.com/staticlibs/external_zlib.git
-    git clone --recursive https://github.com/staticlibs/external_openssl.git
-    git clone --recursive https://github.com/staticlibs/external_curl.git
+    git clone https://github.com/staticlibs/external_zlib.git
+    git clone https://github.com/staticlibs/lookaside_zlib.git
+    git clone https://github.com/staticlibs/external_openssl.git
+    git clone https://github.com/staticlibs/lookaside_openssl.git
+    git clone https://github.com/staticlibs/external_curl.git
+    git clone https://github.com/staticlibs/lookaside_curl.git
     cd external_curl
     mkdir build
     cd build
@@ -56,6 +57,10 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 
 Changelog
 ---------
+
+**2018-02-28**
+ * version 7.29.0-4
+ * drop submodule
 
 **2017-12-31**
  * version 7.29.0-3

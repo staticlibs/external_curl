@@ -1,0 +1,1 @@
+https://github.com/staticlibs/lookaside_curl/tree/fc0aaa01b3efe62bda4a7fceb7b131993c2a950e

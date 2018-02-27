@@ -39,15 +39,12 @@ install:
 before_script:
   - git submodule update --init --recursive
   - cd ..
-# mac
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    git clone https://github.com/staticlibs/tools_macos_openssl.git ;
-    export PKG_CONFIG_PATH=`pwd`/tools_macos_openssl/lib/pkgconfig:$PKG_CONFIG_PATH ;
-    fi
-# android
-  - git clone --recursive https://github.com/staticlibs/external_openssl.git
 # mac and android
-  - git clone --recursive https://github.com/staticlibs/external_zlib.git
+  - git clone https://github.com/staticlibs/external_openssl.git
+  - git clone https://github.com/staticlibs/lookaside_openssl.git
+  - git clone https://github.com/staticlibs/external_zlib.git
+  - git clone https://github.com/staticlibs/lookaside_zlib.git
+  - git clone https://github.com/staticlibs/lookaside_openssl.git
 # all platforms
   - git clone https://github.com/staticlibs/cmake.git
   - git clone https://github.com/staticlibs/staticlib_config.git

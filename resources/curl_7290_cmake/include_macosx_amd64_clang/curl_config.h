@@ -59,7 +59,7 @@
 #define CURL_DISABLE_TFTP 1
 
 /* to disable TLS-SRP authentication */
-/* #undef CURL_DISABLE_TLS_SRP */
+#define CURL_DISABLE_TLS_SRP 1
 
 /* to disable verbose strings */
 /* #undef CURL_DISABLE_VERBOSE_STRINGS */
@@ -604,7 +604,7 @@
 /* #undef HAVE_SPNEGO */
 
 /* if you have the function SRP_Calc_client_key */
-#define HAVE_SSLEAY_SRP 1
+/* #undef HAVE_SSLEAY_SRP */
 
 /* Define to 1 if you have the `SSLv2_client_method' function. */
 #define HAVE_SSLV2_CLIENT_METHOD 1
@@ -1016,7 +1016,7 @@
 /* #undef USE_THREADS_POSIX */
 
 /* Use TLS-SRP authentication */
-#define USE_TLS_SRP 1
+/* #undef USE_TLS_SRP */
 
 /* Use UNIX domain sockets */
 /* #undef USE_UNIX_SOCKETS */

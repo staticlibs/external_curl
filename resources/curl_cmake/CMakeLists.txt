@@ -76,9 +76,11 @@ if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
         -DWIN32
         -DWIN32_LEAN_AND_MEAN
         -DCURL_DISABLE_LDAP )
+    if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
+        list ( APPEND ${PROJECT_NAME}_DEFINITIONS -DHAVE_STRUCT_POLLFD )
+    endif ( )
 else ( )
-    set ( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS}
-        -DHAVE_CONFIG_H )
+    list ( APPEND ${PROJECT_NAME}_DEFINITIONS -DHAVE_CONFIG_H )
 endif ( )
 
 # sources

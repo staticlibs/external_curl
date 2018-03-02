@@ -58,11 +58,18 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2018-03-02**
+
+ * version 7.29.0-5
+ * sdk8.1+ build fix
+
 **2018-02-28**
+
  * version 7.29.0-4
  * drop submodule
 
 **2017-12-31**
+
  * version 7.29.0-3
  * vs2017 support
 

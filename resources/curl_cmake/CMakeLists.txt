@@ -66,6 +66,13 @@ endif ( )
 
 # definitions
 if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+    if ( NOT DEFINED ${PROJECT_NAME}_WINXP_COMPAT )
+        if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
+            set ( ${PROJECT_NAME}_WINXP_COMPAT OFF CACHE BOOL "libCURL WinXP compatibility" )
+        elseif ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_i386_[^_]+" )
+            set ( ${PROJECT_NAME}_WINXP_COMPAT ON CACHE BOOL "libCURL WinXP compatibility" )
+        endif ( )
+    endif ( )
     set ( ${PROJECT_NAME}_DEFINITIONS ${${PROJECT_NAME}_DEFINITIONS}
         -DCURL_STATICLIB 
         -DBUILDING_LIBCURL 
@@ -76,7 +83,7 @@ if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
         -DWIN32
         -DWIN32_LEAN_AND_MEAN
         -DCURL_DISABLE_LDAP )
-    if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
+    if ( NOT ${PROJECT_NAME}_WINXP_COMPAT )
         list ( APPEND ${PROJECT_NAME}_DEFINITIONS -DHAVE_STRUCT_POLLFD )
     endif ( )
 else ( )

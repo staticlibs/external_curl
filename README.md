@@ -58,6 +58,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2018-04-10**
+
+ * version 7.29.0-6
+ * allow to specify WinXP compatibility
+
 **2018-03-02**
 
  * version 7.29.0-5

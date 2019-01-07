@@ -1,1 +1,1 @@
-https://github.com/staticlibs/lookaside_curl/tree/3c93ccc9185b3da594e8004c75dc295fe9f65368
+https://github.com/staticlibs/lookaside_curl/tree/210e82e45a0d525c51660823aac59b377d214b43

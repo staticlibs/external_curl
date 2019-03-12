@@ -20,27 +20,6 @@ if ( NOT DEFINED ${PROJECT_NAME}_LOOKASIDE_DIR )
     set ( ${PROJECT_NAME}_LOOKASIDE_DIR ${CMAKE_CURRENT_LIST_DIR}/../../../lookaside_curl CACHE INTERNAL "" )
 endif ( )
 
-# standalone build
-if ( NOT DEFINED STATICLIB_TOOLCHAIN )
-    if ( NOT DEFINED ${PROJECT_NAME}_TOOLCHAIN )
-        if ( WIN32 )
-            if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-                set ( ${PROJECT_NAME}_TOOLCHAIN "windows_amd64_msvc" )
-            else ( )
-                set ( ${PROJECT_NAME}_TOOLCHAIN "windows_i386_msvc" )
-            endif ( )
-        elseif ( APPLE )
-            set ( ${PROJECT_NAME}_TOOLCHAIN "macosx_amd64_clang" )
-        elseif ( UNIX )
-            set ( ${PROJECT_NAME}_TOOLCHAIN "linux_amd64_gcc" )
-        else ( )
-            message ( FATAL_ERROR "Cannot determine toolchain to use, please specify [${PROJECT_NAME}_TOOLCHAIN]" )
-        endif ( )
-    endif ( )
-else ( )
-    set ( ${PROJECT_NAME}_TOOLCHAIN ${STATICLIB_TOOLCHAIN} )
-endif ( )
-
 # dependencies
 set ( ${PROJECT_NAME}_DEPS zlib openssl )
 external_curl_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAME}_DEPS )
@@ -48,9 +27,9 @@ external_curl_pkg_check_modules ( ${PROJECT_NAME}_DEPS_PC REQUIRED ${PROJECT_NAM
 # headers
 message ( STATUS "Copying headers ..." )
 configure_file( "${${PROJECT_NAME}_LOOKASIDE_DIR}/include/curl/curl.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curl.h" COPYONLY )
-configure_file( "${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}/curlbuild.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curlbuild.h" COPYONLY )
-if ( NOT ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
-    configure_file( "${CMAKE_CURRENT_LIST_DIR}/include_${${PROJECT_NAME}_TOOLCHAIN}/curl_config.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curl_config.h" COPYONLY )
+configure_file( "${CMAKE_CURRENT_LIST_DIR}/include_${external_curl_TOOLCHAIN}/curlbuild.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curlbuild.h" COPYONLY )
+if ( NOT external_curl_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+    configure_file( "${CMAKE_CURRENT_LIST_DIR}/include_${external_curl_TOOLCHAIN}/curl_config.h" "${CMAKE_CURRENT_BINARY_DIR}/include/curl/curl_config.h" COPYONLY )
 endif ( )
 
 # check deplibs cache
@@ -65,11 +44,11 @@ if ( STATICLIB_USE_DEPLIBS_CACHE )
 endif ( )
 
 # definitions
-if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
+if ( external_curl_TOOLCHAIN MATCHES "windows_[^_]+_[^_]+" )
     if ( NOT DEFINED ${PROJECT_NAME}_WINXP_COMPAT )
-        if ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
+        if ( external_curl_TOOLCHAIN MATCHES "windows_amd64_[^_]+" )
             set ( ${PROJECT_NAME}_WINXP_COMPAT OFF CACHE BOOL "libCURL WinXP compatibility" )
-        elseif ( ${PROJECT_NAME}_TOOLCHAIN MATCHES "windows_i386_[^_]+" )
+        elseif ( external_curl_TOOLCHAIN MATCHES "windows_i386_[^_]+" )
             set ( ${PROJECT_NAME}_WINXP_COMPAT ON CACHE BOOL "libCURL WinXP compatibility" )
         endif ( )
     endif ( )
@@ -213,4 +192,3 @@ target_include_directories ( ${PROJECT_NAME} BEFORE PRIVATE
         ${${PROJECT_NAME}_LOOKASIDE_DIR}/include/curl
         ${${PROJECT_NAME}_DEPS_PC_INCLUDE_DIRS} ) 
 target_compile_definitions ( ${PROJECT_NAME} PRIVATE ${${PROJECT_NAME}_DEFINITIONS} )
-

@@ -58,6 +58,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2019-10-02**
+
+ * version 7.29.0-10
+ * add new CVE patches
+
 **2019-03-12**
 
  * version 7.29.0-9

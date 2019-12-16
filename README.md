@@ -58,6 +58,11 @@ This project is released under the [Apache License 2.0](http://www.apache.org/li
 Changelog
 ---------
 
+**2019-12-15**
+
+ * version 7.29.0-11
+ * add dup auth header patch
+
 **2019-10-02**
 
  * version 7.29.0-10

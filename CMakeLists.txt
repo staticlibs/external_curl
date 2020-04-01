@@ -16,7 +16,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project setup
 project ( external_curl C CXX )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.29.0-11 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 7.29.0-12 )
 set ( ${PROJECT_NAME}_DESCRIPTION "cURL library build for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_curl.git )
 include ( ${CMAKE_CURRENT_LIST_DIR}/resources/macros.cmake )
